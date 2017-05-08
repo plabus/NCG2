@@ -11,7 +11,7 @@
     08.05.2017
 */
 
-#include "MarkovChain.hpp"
+#include "markov_chain.hpp"
 
 explicit MarkovChain::MarkovChain(SimulationParameters const& sim_params)
 {
