@@ -13,7 +13,13 @@
 
 #include "markov_chain.hpp"
 
-explicit MarkovChain::MarkovChain(SimulationParameters const& sim_params)
+explicit MarkovChain(
+    const Algorithm algorithm,
+    const ModelParameters model_params,
+    const ActionParameters action_params,
+    RNG& rng,
+    const IOHandler& io_handler,
+)
 {
   // TODO:
   // Implement me!

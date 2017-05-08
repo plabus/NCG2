@@ -19,7 +19,13 @@ class MarkovChain
 {
   public:
 
-    explicit MarkovChain(SimulationParameters const& sim_params);
+    explicit MarkovChain(
+        const Algorithm algorithm,
+        const ModelParameters model_params,
+        const ActionParameters action_params,
+        RNG& rng,
+        const IOHandler& io_handler
+    );
     ~MarkovChain(void);
 
     void generate_configurations(int number);
@@ -30,7 +36,7 @@ class MarkovChain
     const Algorithm algorithm_;
     const ModelParameters model_params_;
     const ActionParameters action_params_;
-    RNG rng_;
+    RNG& rng_;
     const IOHandler& io_handler_;
 
     Dirac_Matrix D_old_;
