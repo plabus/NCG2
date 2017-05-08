@@ -55,7 +55,7 @@ void MarkovChain::generate_configurations(int number)
 void MarkovChain::get_next_configuration(void)
 {
   T_(D_old_, D_new_);
-  const double delta_S = S_old_ - S_new_;
+  const auto delta_S = S_old_ - S_new_;
   if( delta_S <= 0 || exp(-delta_S) > rng_.uniform(0, 1) ) // accept
   {
     // FIXME:
