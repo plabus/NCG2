@@ -18,6 +18,7 @@
 #include "action_parameters.hpp"
 #include "rng.hpp"
 #include "io_handler.hpp"
+#include "action.hpp"
 
 class MarkovChain
 {
