@@ -11,6 +11,7 @@
     08.05.2017
 */
 
+#pragma once
 
 class IOHandler
 {

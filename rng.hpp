@@ -12,6 +12,7 @@
     08.05.2017
 */
 
+#pragma once
 
 // FIXME:
 // Make this a template over the floating point type
