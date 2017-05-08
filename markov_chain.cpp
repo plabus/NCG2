@@ -18,7 +18,7 @@ explicit MarkovChain(
     const ModelParameters model_params,
     const ActionParameters action_params,
     RNG& rng,
-    const IOHandler& io_handler,
+    const IOHandler& io_handler
 )
 {
   // TODO:
