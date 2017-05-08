@@ -14,6 +14,7 @@
 #pragma once
 
 #include "algorithms.hpp"
+#include "model_parameters.hpp"
 
 class MarkovChain
 {
