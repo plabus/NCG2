@@ -19,7 +19,12 @@ MarkovChain::MarkovChain(
     const ActionParameters action_params,
     RNG& rng,
     const IOHandler& io_handler
-)
+) :
+    algorithm_(algorithm),
+    model_params_(model_params),
+    action_params_(action_params),
+    rng_(rng),
+    io_handler_(io_handler)
 {
   // TODO:
   // Implement me!
