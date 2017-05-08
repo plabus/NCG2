@@ -15,6 +15,7 @@
 
 #include "algorithms.hpp"
 #include "model_parameters.hpp"
+#include "action_parameters.hpp"
 
 class MarkovChain
 {
