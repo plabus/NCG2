@@ -13,7 +13,8 @@
 
 #include "markov_chain.hpp"
 
-MarkovChain::MarkovChain(
+template<typename FT>
+MarkovChain<FT>::MarkovChain(
     const Algorithm algorithm,
     const ModelParameters model_params,
     const ActionParameters action_params,
@@ -31,14 +32,16 @@ MarkovChain::MarkovChain(
 }
 
 
-MarkovChain::~MarkovChain(void)
+template<typename FT>
+MarkovChain<FT>::~MarkovChain(void)
 {
   // TODO:
   // Implement me!
 }
 
 
-void MarkovChain::generate_configurations(int number)
+template<typename FT>
+void MarkovChain<FT>::generate_configurations(int number)
 {
   for( auto iter = 0; iter != number; ++iter )
   {
@@ -52,7 +55,8 @@ void MarkovChain::generate_configurations(int number)
 }
 
 
-void MarkovChain::get_next_configuration(void)
+template<typename FT>
+void MarkovChain<FT>::get_next_configuration(void)
 {
   T_(D_old_, D_new_);
   const auto delta_S = S_old_ - S_new_;

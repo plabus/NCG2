@@ -18,8 +18,11 @@
 #include "action_parameters.hpp"
 #include "rng.hpp"
 #include "io_handler.hpp"
+#include "dirac_matrix.hpp"
 #include "action.hpp"
 
+
+template<typename FT>
 class MarkovChain
 {
   public:
@@ -45,10 +48,10 @@ class MarkovChain
     RNG& rng_;
     const IOHandler& io_handler_;
 
-    Dirac_Matrix D_old_;
-    Dirac_Matrix D_new_;
-    Action S_old_;
-    Action S_new_;
+    DiracMatrix<FT> D_old_;
+    DiracMatrix<FT> D_new_;
+    Action<FT> S_old_;
+    Action<FT> S_new_;
     const TimeEvolutionOperator T_;
 
     void get_next_configuration(void);
