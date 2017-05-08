@@ -13,7 +13,7 @@
 
 #include "markov_chain.hpp"
 
-explicit MarkovChain(
+MarkovChain::MarkovChain(
     const Algorithm algorithm,
     const ModelParameters model_params,
     const ActionParameters action_params,
@@ -55,7 +55,7 @@ void MarkovChain::get_next_configuration(void)
   {
     // FIXME:
     // Can we have a swap here??
-    D_old = D_new;
+    D_old_ = D_new_;
   }
   else                                                     // reject
   {
