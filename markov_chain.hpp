@@ -27,17 +27,17 @@ class MarkovChain
 
   private:
 
-    Algorithm algorithm_;
-    ModelParameters model_params_;
-    ActionParameters action_params_;
+    const Algorithm algorithm_;
+    const ModelParameters model_params_;
+    const ActionParameters action_params_;
     RNG rng_;
-    IOHandler io_handler_;
+    const IOHandler& io_handler_;
 
     Dirac_Matrix D_old_;
     Dirac_Matrix D_new_;
     Action S_old_;
     Action S_new_;
-    TimeEvolutionOperator T_;
+    const TimeEvolutionOperator T_;
 
     void get_next_configuration(void);
 };
