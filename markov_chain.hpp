@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "algorithms.hpp"
+
 class MarkovChain
 {
   public:
