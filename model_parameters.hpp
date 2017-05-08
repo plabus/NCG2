@@ -20,7 +20,7 @@ class ModelParameters
 {
   public:
 
-    ModelParameters(
+    explicit ModelParameters(
         int P,
         int Q,
         int N
