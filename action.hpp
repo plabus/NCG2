@@ -14,19 +14,17 @@
 
 #pragma once
 
-#include "precisions.hpp"
 
+template<typename FT>
 class Action
 {
   public:
 
     Action(void) = delete;
     explicit Action(
-      const FloatingPointPrecision prec,
       const ActionParameters action_params,
-      const DiracMatrix& D
+      const DiracMatrix<FT>& D
     ) :
-      prec_(prec),
       action_params_(action_params),
       D_(D)
     {};
@@ -36,7 +34,6 @@ class Action
 
   private:
 
-    const FloatingPointPrecision prec_;
     const ActionParameters action_params_;
-    DiracMatrix& D_;
+    DiracMatrix<FT>& D_;
 };
