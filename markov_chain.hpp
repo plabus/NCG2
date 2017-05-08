@@ -22,6 +22,7 @@ class MarkovChain
 {
   public:
 
+    MarkovChain(void) = delete;
     explicit MarkovChain(
         const Algorithm algorithm,
         const ModelParameters model_params,
