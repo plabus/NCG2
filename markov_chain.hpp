@@ -17,9 +17,10 @@ class MarkovChain
 {
   public:
 
-    explicit MarkovChain(SimulationParams sparams);
+    explicit MarkovChain(SimulationParameters const& sim_params);
+    ~MarkovChain(void);
 
-    void generate_configuration(int number);
+    void generate_configurations(int number);
 
 
   private:
