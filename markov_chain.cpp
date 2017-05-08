@@ -26,7 +26,7 @@ explicit MarkovChain(
 }
 
 
-~MarkovChain::MarkovChain(void)
+MarkovChain::~MarkovChain(void)
 {
   // TODO:
   // Implement me!
