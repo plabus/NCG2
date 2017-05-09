@@ -1,4 +1,3 @@
-
 /**
     NCG++
     algorithms.hpp
