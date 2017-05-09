@@ -14,13 +14,12 @@
 
 #pragma once
 
-// FIXME:
-// Make this a template over the floating point type
+template<typename FT>
 class RNG
 {
   public:
 
-    virtual double uniform(double lower, double uppper);
-    virtual double signed_uniform(double symetric_boundary);
+    virtual FT uniform(FT lower, FT uppper);
+    virtual FT signed_uniform(FT symetric_boundary);
     virtual int uniform_int(int lower, int upper);
 };

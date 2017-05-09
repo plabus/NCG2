@@ -32,7 +32,7 @@ class MarkovChain
         const Algorithm algorithm,
         const ModelParameters model_params,
         const ActionParameters action_params,
-        RNG& rng,
+        RNG<FT>& rng,
         const IOHandler& io_handler
     );
     ~MarkovChain(void);
@@ -45,7 +45,7 @@ class MarkovChain
     const Algorithm algorithm_;
     const ModelParameters model_params_;
     const ActionParameters action_params_;
-    RNG& rng_;
+    RNG<FT>& rng_;
     const IOHandler& io_handler_;
 
     DiracMatrix<FT> D_old_;

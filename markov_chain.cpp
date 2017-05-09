@@ -18,7 +18,7 @@ MarkovChain<FT>::MarkovChain(
     const Algorithm algorithm,
     const ModelParameters model_params,
     const ActionParameters action_params,
-    RNG& rng,
+    RNG<FT>& rng,
     const IOHandler& io_handler
 ) :
     algorithm_(algorithm),
