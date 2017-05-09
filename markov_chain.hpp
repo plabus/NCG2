@@ -20,6 +20,7 @@
 #include "io_handler.hpp"
 #include "dirac_matrix.hpp"
 #include "action.hpp"
+#include "time_evolution_operator.hpp"
 
 
 template<typename FT>
@@ -52,7 +53,7 @@ class MarkovChain
     DiracMatrix<FT> D_new_;
     Action<FT> S_old_;
     Action<FT> S_new_;
-    const TimeEvolutionOperator T_;
+    const TimeEvolutionOperator<FT> T_;
 
     void get_next_configuration(void);
 };
