@@ -14,6 +14,9 @@
 
 #pragma once
 
+#include <vector>
+#include "math_libraries.hpp"
+
 template<typename FT>
 class DiracMatrix
 {
