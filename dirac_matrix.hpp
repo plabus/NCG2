@@ -19,8 +19,8 @@ class DiracMatrix
 {
   public:
 
-    virtual FT operator()(int row, int column) const;
-    virtual FT operator()(int row, int column);
+    FT operator()(int row, int column) const;
+    FT operator()(int row, int column);
 
 
   private:
