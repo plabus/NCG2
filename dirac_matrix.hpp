@@ -16,6 +16,8 @@
 
 #include <vector>
 #include "math_libraries.hpp"
+#include "model_parameters.hpp"
+#include "clifford_algebra.hpp"
 
 template<typename FT>
 class DiracMatrix
@@ -33,6 +35,6 @@ class DiracMatrix
     const CliffordAlgebra cliff_;
     const int num_H_;
     const int num_L_;
-    std::vector< HermitianMatrix > H_;
-    std::vector< AntiHermitianMatrix > L_;
+    std::vector< HermitianMatrix<FT> > H_;
+    std::vector< AntiHermitianMatrix<FT> > L_;
 };
