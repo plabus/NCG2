@@ -14,6 +14,7 @@
 #include <vector>
 #include <complex>
 #include <cassert>
+#include <cmath>
 #include "gamma_matrix.hpp"
 
 
@@ -21,6 +22,12 @@ GammaMatrix::GammaMatrix(const int size)
   :
 size_(size),
 M_(size*size, 0)
+{}
+
+GammaMatrix::GammaMatrix(std::initializer_list< std::complex<int> > const& list)
+  :
+size_(sqrt(list.size())),
+M_(list)
 {}
 
 std::ostream& operator<<(std::ostream& os, const GammaMatrix& A)
@@ -99,18 +106,16 @@ GammaMatrix anticommutator(GammaMatrix const& A, GammaMatrix const& B)
 
 PauliMatrices::PauliMatrices(void)
   :
-sigma1( GammaMatrix(2) ),
-sigma2( GammaMatrix(2) ),
-sigma3( GammaMatrix(2) )
-{
-  std::complex<int> I(0,1);
-
-  sigma1(0,1) = 1;
-  sigma1(1,0) = 1;
-
-  sigma2(0,1) = -I;
-  sigma2(1,0) = I;
-
-  sigma3(0,0) = 1;
-  sigma3(1,1) = -1;
-}
+sigma1(GammaMatrix(
+      { {0,0}, {1,0},
+        {1,0}, {0,0} }
+      )),
+sigma2(GammaMatrix(
+      { {0,0}, {0,-1},
+        {0,1}, {0,0} }
+      )),
+sigma3(GammaMatrix(
+      { {1,0}, {0,0},
+        {0,0}, {-1,0} }
+      ))
+{}

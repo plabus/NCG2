@@ -24,6 +24,7 @@ class GammaMatrix
 
     GammaMatrix(void) = delete;
     explicit GammaMatrix(const int size);
+    explicit GammaMatrix(std::initializer_list< std::complex<int> > const& list);
 
     friend std::ostream& operator<<(std::ostream& os, GammaMatrix const& A);
 
@@ -49,7 +50,7 @@ GammaMatrix anticommutator(GammaMatrix const& A, GammaMatrix const& B);
 struct PauliMatrices
 {
   PauliMatrices(void);
-  GammaMatrix sigma1;
-  GammaMatrix sigma2;
-  GammaMatrix sigma3;
+  const GammaMatrix sigma1;
+  const GammaMatrix sigma2;
+  const GammaMatrix sigma3;
 };
