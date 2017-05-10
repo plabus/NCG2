@@ -13,7 +13,6 @@
 #include <iostream>
 #include <vector>
 #include <complex>
-#include <cstdint>
 #include <cassert>
 #include "gamma_matrix.hpp"
 
@@ -21,7 +20,7 @@
 GammaMatrix::GammaMatrix(const int size)
   :
 size_(size),
-M_(size, std::vector< std::complex<int8_t> >(size, 0))
+M_(size, std::vector< std::complex<int> >(size, 0))
 {}
 
 std::ostream& operator<<(std::ostream& os, const GammaMatrix& A)

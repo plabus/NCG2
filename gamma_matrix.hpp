@@ -16,7 +16,6 @@
 #include <iostream>
 #include <vector>
 #include <complex>
-#include <cstdint>
 
 
 class GammaMatrix
@@ -28,14 +27,14 @@ class GammaMatrix
 
     friend std::ostream& operator<<(std::ostream& os, GammaMatrix const& A);
 
-    std::complex<int8_t> operator()(const int row, const int col) const { return M_[row][col]; }
-    std::complex<int8_t>& operator()(const int row, const int col) { return M_[row][col]; }
+    std::complex<int> operator()(const int row, const int col) const { return M_[row][col]; }
+    std::complex<int>& operator()(const int row, const int col) { return M_[row][col]; }
     int size(void) const { return size_; }
 
   private:
 
     const int size_;
-    std::vector< std::vector< std::complex<int8_t> > > M_;
+    std::vector< std::vector< std::complex<int> > > M_;
 
     void print_(void) const;
 };
