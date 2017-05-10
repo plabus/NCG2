@@ -17,7 +17,6 @@
 #include <vector>
 #include <complex>
 #include <cstdint>
-#include <cassert>
 
 
 class GammaMatrix
