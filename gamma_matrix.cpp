@@ -35,8 +35,7 @@ void GammaMatrix::print_(void) const
   {
     for(auto col = 0; col < M_.size(); ++col)
     {
-      std::cout << " "
-        << static_cast<std::complex<int>>((*this)(row,col));
+      std::cout << " " << (*this)(row,col);
     }
     std::cout << std::endl;
   }
