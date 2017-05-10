@@ -20,7 +20,7 @@
 GammaMatrix::GammaMatrix(const int size)
   :
 size_(size),
-M_(size, std::vector< std::complex<int> >(size, 0))
+M_(size*size, 0)
 {}
 
 std::ostream& operator<<(std::ostream& os, const GammaMatrix& A)
@@ -31,9 +31,9 @@ std::ostream& operator<<(std::ostream& os, const GammaMatrix& A)
 
 void GammaMatrix::print_(void) const
 {
-  for(auto row = 0; row < M_.size(); ++row)
+  for(auto row = 0; row < size_; ++row)
   {
-    for(auto col = 0; col < M_.size(); ++col)
+    for(auto col = 0; col < size_; ++col)
     {
       std::cout << " " << (*this)(row,col);
     }
