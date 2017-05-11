@@ -39,6 +39,21 @@ class CliffordAlgebra
 
     const ModelParameters pqn_;
     std::vector<GammaMatrix> Gammas_;
-
-    std::vector<GammaMatrix> generate_gammas_(void);
 };
+
+
+
+// Non-Member Functions:
+// =====================
+
+// Generates the Clifford Algebra with signature (p,q)
+std::vector<GammaMatrix> generate_small_gammas(
+    const ModelParameters pqn
+);
+
+// Generates the Euclidean Clifford Algebra with signature (d=p+q,0)
+std::vector<GammaMatrix> generate_euclidean_gammas(
+    const int d,                                        // dimensionality of Clifford algebra = # of gamma's
+    const ModelParameters pqn = ModelParameters(0,0,0)  // provides gamma5_prefactor for odd dimensions,
+                                                        // set to zero by default
+);

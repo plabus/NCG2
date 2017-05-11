@@ -30,36 +30,8 @@
 CliffordAlgebra::CliffordAlgebra(ModelParameters const pqn)
   :
     pqn_(pqn),
-    Gammas_(generate_gammas_())
+    Gammas_(generate_small_gammas(pqn_))
 {
-}
-
-// Forword declaration
-std::vector<GammaMatrix> generate_euclidean_gammas(
-    const int d,                                        // dimensionality of Clifford algebra = # of gamma's
-    const ModelParameters pqn = ModelParameters(0,0,0)  // provides gamma5_prefactor for odd dimensions,
-                                                        // set to zero by default
-);
-
-std::vector<GammaMatrix> CliffordAlgebra::generate_gammas_(void)
-{
-  /**
-   *  \brief Generate all small gamma matrices.
-   *
-   *  Generate all small gamma matrices with signiture (d,0)
-   *  and then multiply the last q matrices with I to
-   *  get small gamma matrices of signature (p,q)
-   */
-
-  auto gammas = generate_euclidean_gammas(pqn_.d(), pqn_);
-
-  const std::complex<int> I({0,1});
-  for(auto i = pqn_.p(); i != gammas.size(); ++i)
-  {
-    gammas[i] *= I;
-  }
-
-  return gammas;
 }
 
 
@@ -75,6 +47,28 @@ std::ostream& operator<<(std::ostream& os, CliffordAlgebra const& A)
     os << A.Gammas_[i] << std::endl;
   }
   return os;
+}
+
+
+std::vector<GammaMatrix> generate_small_gammas(ModelParameters const pqn)
+{
+  /**
+   *  \brief Generate all small gamma matrices.
+   *
+   *  Generate all small gamma matrices with signiture (d,0)
+   *  and then multiply the last q matrices with I to
+   *  get small gamma matrices of signature (p,q)
+   */
+
+  auto gammas = generate_euclidean_gammas(pqn.d(), pqn);
+
+  const std::complex<int> I({0,1});
+  for(auto i = pqn.p(); i != gammas.size(); ++i)
+  {
+    gammas[i] *= I;
+  }
+
+  return gammas;
 }
 
 
