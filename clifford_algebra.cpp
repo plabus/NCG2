@@ -75,7 +75,7 @@ std::vector<int> combination(int const upper, int const num_elems, int const num
 {
   /**
    *  \brief Generate [num_comb]th combination of [num_elems]
-   *         in the range of integers [ 1, 2, ..., upper ]
+   *         in the range of integers [ 0, 1, ..., upper - 1 ]
    *
    *  [num+comb] runs from 0 ... (upper choose num_elems) - 1
    */
@@ -90,7 +90,7 @@ std::vector<int> combination(int const upper, int const num_elems, int const num
 
     do
     {
-      combinations[i]++;
+      ++combinations[i];
       r = binomial( upper - combinations[i], num_elems-(i+1) );
       k = k + r;
     } while(k <= num_comb);
@@ -99,6 +99,10 @@ std::vector<int> combination(int const upper, int const num_elems, int const num
   }
 
   combinations[num_elems-1] = combinations[num_elems-2] + num_comb + 1 - k;
+
+  // FIXME: Brute-Force solution to decrease all values by one
+  for(auto& c : combinations) --c;
+
   return combinations;
 }
 
@@ -110,13 +114,13 @@ void count_Hs_and_Ls(std::vector<int> const& sequence, int const p, int const q,
 
   if(n == 1)
   {
-    if(sequence[0] <= p) num_H += 1;
-    else                 num_L += 1;
+    if(sequence[0] < p) num_H += 1;
+    else                num_L += 1;
   }
   else
   {
     auto exp = ( n - 1 ) * n / 2;
-    for(int i = 0; i < n; ++i) if(sequence[i] > p) exp++;
+    for(int i = 0; i < n; ++i) if(sequence[i] >= p) exp++;
 
     if(exp%2==0) num_H += 1;
     else         num_L += 1;
@@ -140,74 +144,65 @@ GammaMatrix antisymmetrise(
     assert(sequence[i] <= d && "antisymmetrise: ERROR: Number of indices bigger than dimension!");
   }
 
+  // If there aren't any indices set the matrix to unity
+  if( num_indices == 0 )
+  {
+    return Unity(k);
+  }
+
   // If there is one index return relevant gamma matrix
   if( num_indices == 1 )
   {
-    /* Note n1 in [1,2,...,dim] */
-    auto index = sequence[0] - 1;
+    auto index = sequence[0];
     return gammas[index];
   }
 
   // If there are two indices calculate and return commutator
   if( num_indices == 2 )
   {
-    auto index1 = sequence[0] - 1;
-    auto index2 = sequence[1] - 1;
+    auto index1 = sequence[0];
+    auto index2 = sequence[1];
     return commutator(gammas[index1], gammas[index2]);
   }
 
+  // FIXME: THIS DOESN'T SEEM TO WORK FOR d >= 5
   // If there are more than two indices anti-symmetrise recursively
+  GammaMatrix matrix(k);
+
   if( num_indices > 2 )
   {
-    std::cout << " CAN'T DO THAT YET!" << std::endl;
+    // Iterate over all elements in sequence:
+    //
+    // 1. sequence_new = [a1, a2, ..., (an), ..., a_num_indices]
+    // 2. call antisymmetrise recursively and save in buffer1
+    // 3. take the product between buffer1 and the remaining
+    //    gamma matrix and save in buffer2
+    // 4. matrix += (-1)^(pos-1) * buffer2
+    // 5. after iteration matrix = matrix / num_indices
+
+    for(auto i = 0; i < num_indices; ++i)
+    {
+      // 1. Copy new sequence without the ith element
+      auto new_sequence = sequence;
+      new_sequence.erase( new_sequence.begin() + i );
+
+      // 2. Recursive step
+      auto buffer1 = antisymmetrise(gammas, new_sequence, d, k);
+
+      // 3. Take the product
+      auto index = sequence[i];
+      auto buffer2 = gammas[index] * buffer1;
+
+      // 4. Add to the result matrix
+      if(i % 2 == 0) matrix = matrix + buffer2;
+      else           matrix = matrix - buffer2;
+    }
+
+    // 5. Divide by the number of indices
+    matrix = matrix / ( 2 * num_indices );
   }
-  // {
-  //   /* Iterate over all elements in sequence:               *
-  //    * 0. choose element n                                  *
-  //    * 1. seq_new = [a1, a2, ..., (an), ..., a_num_indices] *
-  //    * 2. call antisymmetrise recursively and save in buff1 *
-  //    * 3. take the product between buff1 and the remaining  *
-  //    *    gamma matrix and save in buff2                    *
-  //    * 4. matrix += (-1)^(pos-1) * buff2                    *
-  //    * 5. after iteration matrix = matrix / num_indices     */
-  //    int new_seq[num_indices-1];
-  //    float complex *buff1 = (float complex*) malloc(k*k*sizeof(float complex));
-  //    float complex *buff2 = (float complex*) malloc(k*k*sizeof(float complex));
 
-  //    for(int i=0;i<num_indices;++i) { /* Iterator over sequence */
-  //      /* 0. Initialise buff2 to zero */
-  //      for(int ii=0;ii<k*k;++ii) buff2[ii] = 0. + 0.*I;
-  //      /* 1. Copy new sequence w/o ith element */
-  //      index = 0;
-  //      for(int j=0;j<num_indices;++j) {
-  //        if(i!=j) {
-  //          new_seq[index] = sequence[j];
-  //          index++;
-  //        }
-  //      }
-  //      /* 2. Recursive step */
-  //      antisymmetrise(gammas, dim, k, num_indices-1, new_seq, buff1);
-  //      /* 3. Take the product */
-  //      for(int ii=0;ii<k;++ii) {
-  //        for(int jj=0;jj<k;++jj) {
-  //          for(int ll=0;ll<k;++ll) {
-  //            buff2[ii*k+jj] += buff1[ii*k+ll]*gammas[ll*k+jj + (sequence[i]-1)*k*k];
-  //          }
-  //        }
-  //      }
-  //      /* 4. Add to the result matrix */
-  //      for(int ii=0;ii<k*k;++ii)
-  //        if(i%2==0) matrix[ii] += buff2[ii];
-  //        else       matrix[ii] -= buff2[ii];
-  //    }
-  //    /* 5. Divide by #indices */
-  //    for(int i=0;i<k*k;++i) matrix[i] /= num_indices;
-
-  //    free(buff1);
-  //    free(buff2);
-  // }
-
-  return GammaMatrix(k);
+  return matrix;
 }
 
 
@@ -235,7 +230,7 @@ std::vector<GammaMatrix> generate_odd_clifford_group(
     for(auto num_comb = 0; num_comb < num_matrices; ++num_comb)
     {
       // 1. Generate the [num_comb]th combination with num_indices elements
-      //    out of the range [1..d]
+      //    out of the range [0...d-1]
       auto const index_sequence = combination(d, num_indices, num_comb);
       count_Hs_and_Ls(index_sequence, p, q, num_H, num_L);
       auto matrix = antisymmetrise(gammas, index_sequence, d, k);
