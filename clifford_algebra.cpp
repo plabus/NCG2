@@ -39,6 +39,7 @@ CliffordAlgebra::CliffordAlgebra(ModelParameters const pqn)
 // Non-Member Functions:
 // =====================
 
+
 std::ostream& operator<<(std::ostream& os, CliffordAlgebra const& A)
 {
   for(auto i= 0; i < A.Gammas_.size(); ++i)
@@ -47,6 +48,55 @@ std::ostream& operator<<(std::ostream& os, CliffordAlgebra const& A)
     os << A.Gammas_[i] << std::endl;
   }
   return os;
+}
+
+
+// TODO: Move to a better place
+uint64_t factorial(uint64_t n)
+{
+  if( n == 0 || n == 1 ) return 1;
+  else return ( n * factorial(n-1) );
+}
+
+
+// TODO: Move to a better place
+uint64_t binomial(uint64_t a, uint64_t b)
+{
+  return factorial(a) / ( factorial(b) * factorial(a-b) );
+}
+
+
+std::vector<GammaMatrix> generate_odd_clifford_group(
+    const ModelParameters pqn
+)
+{
+  const auto p = pqn.p();
+  const auto q = pqn.q();
+  const auto d = pqn.d();
+  const auto k = pqn.k();
+  int num_H = 0;
+  int num_L = 0;
+
+  std::vector<GammaMatrix> Gammas;
+  const auto gammas = generate_small_gammas(pqn);
+
+  for(auto num_indices = 1; num_indices <= d; num_indices += 2)
+  {
+    // Calculate number of Gamma matrices with fixed number of indices:
+    //   # matrices = d choose num_indices
+    auto num_matrices = binomial(d, num_indices);
+
+    // Iterations over Gammas with fixed number of indices */
+    for(auto m = 0; m < num_matrices; ++m)
+    {
+      auto index_sequence = combination(d, num_indices, m + 1);
+      count_Hs_and_Ls(p, q, index_sequence, num_H, num_L);
+      auto matrix = antisymmetrise(gammas, d, k, index_sequence);
+      Gammas = push_back(matrix);
+    }
+  }
+
+  return Gammas;
 }
 
 
