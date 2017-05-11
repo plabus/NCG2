@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include "model_parameters.hpp"
 #include "gamma_matrix.hpp"
 #include "clifford_algebra.hpp"
@@ -122,7 +123,6 @@ std::vector<GammaMatrix> generate_small_gammas(ModelParameters const pqn)
 }
 
 
-// FIXME: This doesn't seem to work properly for d > 6
 std::vector<GammaMatrix> generate_euclidean_gammas(
     const int d,                // dimensionality of Clifford algebra = # of gamma's
     const ModelParameters pqn   // provides gamma5_prefactor for odd dimensions,
@@ -139,25 +139,32 @@ std::vector<GammaMatrix> generate_euclidean_gammas(
   const PauliMatrices Pauli;
   std::vector<GammaMatrix> gammas;
 
-  if( d == 1 )                         // Start of recursion
+  if( d == 1 ) // Start of recursion
   {
     gammas.push_back( Unity(1) );
   }
-  else if( d == 2 )                    // Start of recursion
+  else if( d == 2 ) // Start of recursion
   {
     gammas.push_back( Pauli.sigma1 );
     gammas.push_back( Pauli.sigma2 );
   }
-  else if( d > 2 && d % 2 == 0 )       // Even-dim case
+  else if( d > 2 && d % 2 == 0 ) // Even-dim case
   {
-    /** Gamma matrices in d even dimensions:
+    /**
+     *  Gamma matrices in d even dimensions
      *
      *  { gamma_mu (x) sigma1, 1I (x) sigma2, 1I (x) sigma3 },
      *
-     *  where gamma_mu are the matrices d-2
+     *  where gamma_mu and 1I are the matrices in (d-2) dimensions,
+     *  i.e. k x k square complex matrices with
+     *
+     *    k = 2^{(d-2)/2}
+     *
      */
-    auto small_gammas = generate_euclidean_gammas(d-2);
-    auto one = Unity(d-2);
+    auto d_recursive = d-2;
+    auto k_recursive = static_cast<int>( pow(2, d_recursive/2) );
+    auto small_gammas = generate_euclidean_gammas(d_recursive);
+    auto one = Unity(k_recursive);
 
     // The following are outer (tensor) products
     for(auto gamma : small_gammas)
@@ -167,13 +174,14 @@ std::vector<GammaMatrix> generate_euclidean_gammas(
     gammas.push_back( one % Pauli.sigma2 );
     gammas.push_back( one % Pauli.sigma3 );
   }
-  else                                 // Odd-dim case
+  else // Odd-dim case
   {
-    /** Gamma matrices in d odd dimensions:
+    /**
+     *  Gamma matrices in d odd dimensions
      *
-     *  { gamma_mu, gamma_5 },
+     *    { gamma_mu, gamma_5 },
      *
-     *  where gamma_mu are the matrices d-1
+     *  where gamma_mu are the matrices d-1.
      */
     gammas = generate_euclidean_gammas(d-1);
     auto prefactor = pqn.gamma5_prefactor();
