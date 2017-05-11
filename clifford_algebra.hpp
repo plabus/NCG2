@@ -64,3 +64,32 @@ std::vector<GammaMatrix> generate_euclidean_gammas(
     const ModelParameters pqn = ModelParameters(0,0,0)  // provides gamma5_prefactor for odd dimensions,
                                                         // set to zero by default
 );
+
+
+// Non-Member Utility Functions:
+// =============================
+
+uint64_t factorial( uint64_t const n);
+
+uint64_t binomial(uint64_t const a, uint64_t const b);
+
+std::vector<int> combination(
+    int const upper,
+    int const num_elems,
+    int const num_comb
+);
+
+void count_Hs_and_Ls(
+    std::vector<int> const& sequence,
+    int const p,
+    int const q,
+    int& num_H,
+    int& num_L
+);
+
+GammaMatrix antisymmetrise(
+    std::vector<GammaMatrix> const& gammas,
+    std::vector<int> const& sequence,
+    int const d,
+    int const k
+);
