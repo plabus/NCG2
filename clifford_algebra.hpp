@@ -84,17 +84,16 @@ std::ostream& operator<<(std::ostream& os, CliffordAlgebra const& A)
 std::vector<GammaMatrix> generate_gammas(const int d)
 {
   std::vector<GammaMatrix> gammas;
-  PauliMatrices pauli;
+  PauliMatrices Pauli;
 
   if( d == 1 )
   {
-    auto one = Unity(1);
-    gammas.push_back( one );
+    gammas.push_back( Unity(1) );
   }
   else if( d == 2 )
   {
-    gammas.push_back( pauli.sigma1 );
-    gammas.push_back( pauli.sigma2 );
+    gammas.push_back( Pauli.sigma1 );
+    gammas.push_back( Pauli.sigma2 );
   }
   else if( d > 2 && d % 2 == 0 )
   {
@@ -104,10 +103,10 @@ std::vector<GammaMatrix> generate_gammas(const int d)
     // The following are outer (tensor) products
     for(auto gamma : small_gammas)
     {
-      gammas.push_back( gamma % pauli.sigma1 );
+      gammas.push_back( gamma % Pauli.sigma1 );
     }
-    gammas.push_back( one % pauli.sigma2 );
-    gammas.push_back( one % pauli.sigma3 );
+    gammas.push_back( one % Pauli.sigma2 );
+    gammas.push_back( one % Pauli.sigma3 );
   }
   else
   {
