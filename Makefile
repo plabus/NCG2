@@ -1,6 +1,7 @@
+# CXX=g++
 CXX=clang++
 CXXFLAGS= -std=c++14 -O2
-WARNINGS= -Wall -Wpedantic
+WARNINGS= -Wall -Wpedantic #-Weverything -Wno-c++98-compat
 LIBRARY=
 
 CXXFLAGS+=${WARNINGS}
@@ -9,14 +10,15 @@ CXXFLAGS+=${WARNINGS}
 all: ncg++
 
 
-ncg++: markov_chain.o
+ncg++: gamma_matrix.o clifford_algebra.o main.o
 	${CXX} -o $@ $^ ${CXXFLAGS} ${LIBRARY}
 
 
 
-%.o: %.c
+%.o: %.cpp
 	${CXX} -c ${CXXFLAGS} $< -o $@
 
 
 clean:
 	rm -f *.o
+	rm -f ncg++
