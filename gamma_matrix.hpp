@@ -50,6 +50,7 @@ GammaMatrix operator+(GammaMatrix const& A, GammaMatrix const& B);
 GammaMatrix operator-(GammaMatrix const& A, GammaMatrix const& B);
 GammaMatrix operator*(GammaMatrix const& A, GammaMatrix const& B);
 GammaMatrix operator*(std::complex<int> c, GammaMatrix const& A);
+GammaMatrix operator/(GammaMatrix const& A, int c);
 GammaMatrix operator%(GammaMatrix const& A, GammaMatrix const& B);
 
 GammaMatrix commutator(GammaMatrix const& A, GammaMatrix const& B);

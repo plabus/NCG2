@@ -113,6 +113,18 @@ GammaMatrix operator*(std::complex<int> c, GammaMatrix const& A)
   return B;
 }
 
+GammaMatrix operator/(GammaMatrix const& A, int c)
+{
+  const int size = A.size();
+  GammaMatrix B(size);
+
+  for(auto i = 0; i < size; ++i)
+    for(auto j = 0; j < size; ++j)
+        B(i,j) = A(i,j) / c;
+
+  return B;
+}
+
 GammaMatrix& GammaMatrix::operator*=(GammaMatrix const& other)
 {
   assert(size_==other.size() && "GammaMatrix Multiplication Assignment: ERROR: Matrices have different sizes");
