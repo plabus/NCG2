@@ -63,13 +63,6 @@ std::vector<GammaMatrix> CliffordAlgebra::generate_gammas_(void)
   // Generate all small gamma matrices with signiture (d,0)
   // and then multiply the last q matrices with I
   auto gammas = generate_gammas(d);
-
-  for(auto i= 0; i < gammas.size(); ++i)
-  {
-    std::cout << " Gamma " << i+1 << ":" << std::endl;
-    std::cout << gammas[i] << std::endl;
-  }
-
   for(auto i = p; i != gammas.size(); ++i) gammas[i] = I * gammas[i];
   return gammas;
 }
@@ -121,20 +114,17 @@ std::vector<GammaMatrix> generate_gammas(const int d)
     // FIXME: How to better calculate s?
     const int s = (8*8*8-d) % 8;
     const int exponent = ( s * (s+1)/2 ) % 4;
-    std::complex<int> prefactor({0,0});
     const std::complex<int> I({0,1});
+
+    std::complex<int> prefactor;
+    if(exponent==0)      prefactor =  1; // I^(4n+0)
+    else if(exponent==1) prefactor =  I; // I^(4n+1)
+    else if(exponent==2) prefactor = -1; // I^(4n+2)
+    else if(exponent==3) prefactor = -I; // I^(4n+3)
+
     gammas = generate_gammas(d-1);
     auto gamma_5 = prefactor * gammas.front();
-
-    if(exponent==0)      prefactor =  1; // i^4n
-    else if(exponent==1) prefactor =  I; // i^4n+1
-    else if(exponent==2) prefactor = -1; // i^4n+2
-    else if(exponent==3) prefactor = -I; // i^4n+3
-
-    for(auto i = 1; i != gammas.size(); ++i)
-    {
-      gamma_5 = gamma_5 * gammas[i];
-    }
+    for(auto i = 1; i != gammas.size(); ++i) gamma_5 = gamma_5 * gammas[i];
     gammas.push_back( gamma_5 );
   }
 
