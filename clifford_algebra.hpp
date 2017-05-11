@@ -46,12 +46,19 @@ class CliffordAlgebra
 // Non-Member Functions:
 // =====================
 
-// Generates the Clifford Algebra with signature (p,q)
+// Generates the Odd Clifford Group
+//   \Gamma_\mu = { \gamma_mu, \gamma_{\mu \nu \rho}, ... }
+// with signature (p,q)
+std::vector<GammaMatrix> generate_odd_clifford_group(
+    const ModelParameters pqn
+);
+
+// Generates the Clifford Algebra { \gamma_\mu } with signature (p,q)
 std::vector<GammaMatrix> generate_small_gammas(
     const ModelParameters pqn
 );
 
-// Generates the Euclidean Clifford Algebra with signature (d=p+q,0)
+// Generates the Euclidean Clifford Algebra { \gamma_\mu } with signature (d=p+q,0)
 std::vector<GammaMatrix> generate_euclidean_gammas(
     const int d,                                        // dimensionality of Clifford algebra = # of gamma's
     const ModelParameters pqn = ModelParameters(0,0,0)  // provides gamma5_prefactor for odd dimensions,
