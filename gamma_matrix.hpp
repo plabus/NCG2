@@ -22,9 +22,11 @@ class GammaMatrix
 {
   public:
 
+    // Constructors:
     GammaMatrix(void) = delete;
     explicit GammaMatrix(const int size);
     explicit GammaMatrix(std::initializer_list< std::complex<int> > const& list);
+    GammaMatrix& operator=(GammaMatrix const& other);
 
     std::complex<int> operator()(const int row, const int col) const { return M_[row*size_+col]; }
     std::complex<int>& operator()(const int row, const int col) { return M_[row*size_+col]; }

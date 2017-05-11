@@ -13,6 +13,7 @@
 #include <iostream>
 #include <vector>
 #include <complex>
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include "gamma_matrix.hpp"
@@ -34,6 +35,16 @@ std::ostream& operator<<(std::ostream& os, const GammaMatrix& A)
 {
   A.print_();
   return os;
+}
+
+GammaMatrix& GammaMatrix::operator=(GammaMatrix const& other)
+{
+  assert(this->size()==other.size() && "GammaMatrix Copy Constructor: ERROR: Matrices have different sizes");
+
+  if(&other == this) return *this;
+
+  std::copy(other.M_.begin(), other.M_.end(), M_.begin());
+  return *this;
 }
 
 void GammaMatrix::print_(void) const
