@@ -90,6 +90,44 @@ GammaMatrix operator*(GammaMatrix const& A, GammaMatrix const& B)
   return C;
 }
 
+GammaMatrix operator*(std::complex<int> c, GammaMatrix const& A)
+{
+  const int size = A.size();
+  GammaMatrix B(size);
+
+  for(auto i = 0; i < size; ++i)
+    for(auto j = 0; j < size; ++j)
+        B(i,j) = c * A(i,j);
+
+  return B;
+}
+
+GammaMatrix GammaMatrix::operator*=(GammaMatrix const& other)
+{
+  assert(size_==other.size() && "GammaMatrix Multiplication Assignment: ERROR: Matrices have different sizes");
+  return (*this) * other;
+}
+
+GammaMatrix GammaMatrix::operator*=(std::complex<int> c)
+{
+  return c * (*this);
+}
+
+GammaMatrix operator%(GammaMatrix const& A, GammaMatrix const& B)
+{
+  const int size_A = A.size();
+  const int size_B = B.size();
+  GammaMatrix C(size_A * size_B);
+
+  for(auto i = 0; i < size_A; ++i)
+    for(auto j = 0; j < size_A; ++j)
+      for(auto ii = 0; ii < size_B; ++ii)
+        for(auto jj = 0; jj < size_B; ++jj)
+          C(i*size_B+ii,j*size_B+jj) += A(i,j) * B(ii,jj);
+
+  return C;
+}
+
 GammaMatrix commutator(GammaMatrix const& A, GammaMatrix const& B)
 {
   assert(A.size()==B.size() && "GammaMatrix Commutator: ERROR: Matrices have different sizes");
@@ -119,3 +157,11 @@ sigma3(GammaMatrix(
         {0,0}, {-1,0} }
       ))
 {}
+
+GammaMatrix Unity(const int d)
+{
+  auto ret = GammaMatrix(d);
+  for(auto i = 0; i < d; ++i)
+    ret(i,i) = 1;
+  return ret;
+}
