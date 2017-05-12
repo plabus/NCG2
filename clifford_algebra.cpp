@@ -80,6 +80,8 @@ std::vector<int> combination(int const upper, int const num_elems, int const num
    *  [num+comb] runs from 0 ... (upper choose num_elems) - 1
    */
 
+  if( num_elems == 0 ) return std::vector<int>(0);
+
   std::vector<int> combinations(num_elems, 0);
   int k = 0;
   int r = 0;
