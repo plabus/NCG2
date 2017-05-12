@@ -22,6 +22,7 @@
 #include <cmath>
 #include <cassert>
 #include "model_parameters.hpp"
+#include "basic_maths.hpp"
 #include "gamma_matrix.hpp"
 #include "clifford_algebra.hpp"
 
@@ -40,6 +41,10 @@ CliffordAlgebra::CliffordAlgebra(ModelParameters const pqn)
 
 GammaMatrix CliffordAlgebra::antisymmetric_product(std::vector<int> const& indices) const
 {
+  auto matrix = antisymmetrise(gammas_, indices);
+  auto const n = factorial( indices.size() );
+  matrix = matrix / n;
+  return matrix;
 }
 
 
@@ -159,7 +164,9 @@ GammaMatrix antisymmetrise(
     std::vector<int> const& sequence
 )
 {
-  // Number of indices we have to antisymmetrise over
+  // Base Variables and Assertions:
+  // ==============================
+
   const auto num_indices = sequence.size();
   const auto d = gammas.size();
   const auto k = gammas.front().size();
@@ -170,62 +177,57 @@ GammaMatrix antisymmetrise(
     assert(sequence[i] <= d && "antisymmetrise: ERROR: Number of indices bigger than dimension!");
   }
 
-  // If there aren't any indices set the matrix to unity
+
+  // Base Cases:
+  // ===========
+
   if( num_indices == 0 )
   {
     return Unity(k);
   }
-
-  // If there is one index return relevant gamma matrix
-  if( num_indices == 1 )
+  else if( num_indices == 1 )
   {
     auto index = sequence[0];
     return gammas[index];
   }
-
-  // If there are two indices calculate and return commutator
-  if( num_indices == 2 )
+  else if( num_indices == 2 )
   {
     auto index1 = sequence[0];
     auto index2 = sequence[1];
     return commutator(gammas[index1], gammas[index2]);
   }
 
-  // FIXME: THIS DOESN'T SEEM TO WORK FOR d >= 5
-  // If there are more than two indices anti-symmetrise recursively
+
+  // Recursive Step:
+  // ===============
+
   GammaMatrix matrix(k);
 
-  if( num_indices > 2 )
+  // Iterate over all elements in sequence:
+  //
+  // 1. delete one element out of sequence and construct a new one
+  //    sequence_new = [a1, a2, ..., (an), ..., a_num_indices]
+  // 2. call antisymmetrise recursively and save in buffer1
+  // 3. take the product between buffer1 and the remaining
+  //    gamma matrix and save in buffer2
+  // 4. matrix += (-1)^(pos-1) * buffer2
+
+  for(auto i = 0; i < num_indices; ++i)
   {
-    // Iterate over all elements in sequence:
-    //
-    // 1. sequence_new = [a1, a2, ..., (an), ..., a_num_indices]
-    // 2. call antisymmetrise recursively and save in buffer1
-    // 3. take the product between buffer1 and the remaining
-    //    gamma matrix and save in buffer2
-    // 4. matrix += (-1)^(pos-1) * buffer2
-    // 5. after iteration matrix = matrix / num_indices
+    // 1. Copy new sequence without the ith element
+    auto new_sequence = sequence;
+    new_sequence.erase( new_sequence.begin() + i );
 
-    for(auto i = 0; i < num_indices; ++i)
-    {
-      // 1. Copy new sequence without the ith element
-      auto new_sequence = sequence;
-      new_sequence.erase( new_sequence.begin() + i );
+    // 2. Recursive step
+    auto buffer1 = antisymmetrise(gammas, new_sequence);
 
-      // 2. Recursive step
-      auto buffer1 = antisymmetrise(gammas, new_sequence);
+    // 3. Take the product
+    auto index = sequence[i];
+    auto buffer2 = gammas[index] * buffer1;
 
-      // 3. Take the product
-      auto index = sequence[i];
-      auto buffer2 = gammas[index] * buffer1;
-
-      // 4. Add to the result matrix
-      if(i % 2 == 0) matrix = matrix + buffer2;
-      else           matrix = matrix - buffer2;
-    }
-
-    // 5. Divide by the number of indices
-    matrix = matrix / ( 2 * num_indices );
+    // 4. Add to the result matrix
+    if(i % 2 == 0) matrix = matrix + buffer2;
+    else           matrix = matrix - buffer2;
   }
 
   return matrix;
