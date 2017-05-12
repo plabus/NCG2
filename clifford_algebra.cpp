@@ -87,7 +87,7 @@ std::ostream& operator<<(std::ostream& os, CliffordAlgebra const& A)
 {
   for(auto i= 0; i < A.size(); ++i)
   {
-    os << " gamma " << i+1 << ":" << std::endl;
+    os << " \u03B3_" << i+1 << ":" << std::endl;
     os << A.gammas_[i] << std::endl;
   }
   return os;
