@@ -19,6 +19,8 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
+#include <cassert>
 #include "model_parameters.hpp"
 #include "gamma_matrix.hpp"
 #include "clifford_algebra.hpp"
