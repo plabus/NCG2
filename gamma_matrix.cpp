@@ -49,11 +49,21 @@ GammaMatrix& GammaMatrix::operator=(GammaMatrix const& other)
 
 void GammaMatrix::print_(void) const
 {
+  std::complex<int> zero({0,0});
+  std::complex<int> one({1,0});
+  std::complex<int> I({0,1});
+
   for(auto row = 0; row < size_; ++row)
   {
     for(auto col = 0; col < size_; ++col)
     {
-      std::cout << " " << (*this)(row,col);
+      auto elem = (*this)(row,col);
+      if( elem == zero )      std::cout << "  0";
+      else if( elem ==  one ) std::cout << "  1";
+      else if( elem == -one ) std::cout << " -1";
+      else if( elem ==  I )   std::cout << "  i";
+      else if( elem == -I )   std::cout << " -i";
+      else                    std::cout << " " << elem;
     }
     std::cout << std::endl;
   }
@@ -138,6 +148,25 @@ GammaMatrix& GammaMatrix::operator*=(std::complex<int> c)
   return *this;
 }
 
+GammaMatrix GammaMatrix::operator-(void) const
+{
+  GammaMatrix ret(size_);
+  for(auto i = 0; i < size_; ++i)
+    for(auto j = 0; j < size_; ++j)
+      ret(i,j) = - (*this)(i,j);
+  return ret;
+}
+
+bool GammaMatrix::operator==(GammaMatrix const& other) const
+{
+  if( size_ != other.size() ) return false;
+  for(auto i = 0; i < size_; ++i)
+    for(auto j = 0; j < size_; ++j)
+      if( (*this)(i,j) != other(i,j) )
+        return false;
+  return true;
+}
+
 GammaMatrix operator%(GammaMatrix const& A, GammaMatrix const& B)
 {
   const int size_A = A.size();
@@ -164,6 +193,19 @@ GammaMatrix anticommutator(GammaMatrix const& A, GammaMatrix const& B)
   assert(A.size()==B.size() && "GammaMatrix Anticommutator: ERROR: Matrices have different sizes");
   return A*B+B*A;
 }
+
+
+bool is_hermitian(GammaMatrix const& M)
+{
+  return ( M * M == Unity(M.size()) );
+}
+
+
+bool is_antihermitian(GammaMatrix const& M)
+{
+  return ( M * M == -Unity(M.size()) );
+}
+
 
 
 

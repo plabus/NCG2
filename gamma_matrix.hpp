@@ -32,6 +32,8 @@ class GammaMatrix
     std::complex<int>& operator()(const int row, const int col) { return M_[row*size_+col]; }
     GammaMatrix& operator*=(GammaMatrix const& other);
     GammaMatrix& operator*=(std::complex<int> c);
+    GammaMatrix operator-(void) const;
+    bool operator==(GammaMatrix const& other) const;
 
     friend std::ostream& operator<<(std::ostream& os, GammaMatrix const& A);
 
@@ -55,6 +57,10 @@ GammaMatrix operator%(GammaMatrix const& A, GammaMatrix const& B);
 
 GammaMatrix commutator(GammaMatrix const& A, GammaMatrix const& B);
 GammaMatrix anticommutator(GammaMatrix const& A, GammaMatrix const& B);
+
+bool is_hermitian(GammaMatrix const& M);
+bool is_antihermitian(GammaMatrix const& M);
+
 
 
 struct PauliMatrices
