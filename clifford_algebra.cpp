@@ -41,6 +41,16 @@ CliffordAlgebra::CliffordAlgebra(ModelParameters const pqn)
 
 GammaMatrix CliffordAlgebra::antisymmetric_product(std::vector<int> const& indices) const
 {
+  /**
+   *  \brief Return antisymmetrised product of gamma matrices
+   *         with the indices given.
+   *
+   *  1. Generate the sum of (signed) products of all
+   *     possible permutations
+   *  2. Normalise the sum by dividing through the number
+   *     of permutations
+   */
+
   auto matrix = antisymmetrise(gammas_, indices);
   auto const n = factorial( indices.size() );
   matrix = matrix / n;
