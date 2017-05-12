@@ -51,10 +51,9 @@ GammaMatrix CliffordAlgebra::antisymmetric_product(std::vector<int> const& indic
    *     of permutations
    */
 
-  auto matrix = antisymmetrise(gammas_, indices);
+  auto const matrix = antisymmetrise(gammas_, indices);
   auto const n = factorial( indices.size() );
-  matrix = matrix / n;
-  return matrix;
+  return matrix / n;
 }
 
 
