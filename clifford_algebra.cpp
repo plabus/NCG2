@@ -138,7 +138,7 @@ GammaMatrix antisymmetrise(
     int const k
 )
 {
-  // Number of indices we have antisymmetrise over
+  // Number of indices we have to antisymmetrise over
   auto num_indices = sequence.size();
 
   assert(num_indices <= d && "antisymmetrise: ERROR: Number of indices bigger than dimension!");
@@ -223,7 +223,7 @@ std::vector<GammaMatrix> generate_odd_clifford_group(
   std::vector<GammaMatrix> Gammas;
   const auto gammas = generate_small_gammas(pqn);
 
-  for(auto num_indices = 1; num_indices <= d; num_indices += 2)
+  for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
   {
     // Calculate number of Gamma matrices with fixed number of indices:
     //   # matrices = (d choose num_indices)
