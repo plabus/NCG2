@@ -60,16 +60,3 @@ std::vector<int> combination(
     int const num_elems,
     int const num_comb
 );
-
-void count_Hs_and_Ls(
-    std::vector<int> const& sequence,
-    int const p,
-    int const q,
-    int& num_H,
-    int& num_L
-);
-
-GammaMatrix antisymmetrise(
-    std::vector<GammaMatrix> const& gammas,
-    std::vector<int> const& sequence
-);
