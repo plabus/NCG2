@@ -215,38 +215,30 @@ std::vector<GammaMatrix> generate_odd_clifford_group(
     const ModelParameters pqn
 )
 {
-  const auto p = pqn.p();
-  const auto q = pqn.q();
-  const auto d = pqn.d();
-  int num_H = 0;
-  int num_L = 0;
-
   std::vector<GammaMatrix> Gammas;
   const auto gammas = generate_small_gammas(pqn);
+  const auto d = gammas.size();
 
   // for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
   for(auto num_indices = 0; num_indices <= d; num_indices += 1) // all numbers of indices
   {
     // Calculate number of Gamma matrices with fixed number of indices:
     //   # Gamma matrices = (d choose num_indices)
-    auto num_matrices = binomial(d, num_indices);
+    const auto num_matrices = binomial(d, num_indices);
 
     // Iterations over Gammas with fixed number of indices
     for(auto num_comb = 0; num_comb < num_matrices; ++num_comb)
     {
       // 1. Generate the [num_comb]th combination with num_indices elements
       //    out of the range [0, 1, ..., d-1]
-      auto const index_sequence = combination(d, num_indices, num_comb);
-      count_Hs_and_Ls(index_sequence, p, q, num_H, num_L);
-      auto matrix = antisymmetrise(gammas, index_sequence);
+      const auto index_sequence = combination(d, num_indices, num_comb);
+      const auto matrix = antisymmetrise(gammas, index_sequence);
       Gammas.push_back(matrix);
     }
   }
 
   // TODO:
   // add reshuffling!
-  // copy num_H & num_L into CliffordAlgebra class object
-  std::cout << " H's = " << num_H << ", L's = " << num_L << std::endl;
 
   return Gammas;
 }
