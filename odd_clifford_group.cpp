@@ -44,9 +44,7 @@ std::vector<GammaMatrix> OddCliffordGroup::generate_odd_clifford_group_()
   const CliffordAlgebra small_gammas(pqn_);
   const auto d = small_gammas.size();
 
-  // FIXME: Set back to odd indices eventually
-  // for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
-  for(auto num_indices = 0; num_indices <= d; num_indices += 1) // all numbers of indices
+  for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
   {
     // Calculate number of Gamma matrices with fixed number of indices:
     //   # Gamma matrices = (d choose num_indices)
