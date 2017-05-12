@@ -10,7 +10,7 @@ CXXFLAGS+=${WARNINGS}
 all: ncg++
 
 
-ncg++: gamma_matrix.o clifford_algebra.o odd_clifford_group.o main.o
+ncg++: basic_maths.o gamma_matrix.o clifford_algebra.o odd_clifford_group.o main.o
 	${CXX} -o $@ $^ ${CXXFLAGS} ${LIBRARY}
 
 

@@ -45,18 +45,3 @@ class OddCliffordGroup
     // with signature (p,q)
     std::vector<GammaMatrix> generate_odd_clifford_group_(void);
 };
-
-
-
-// Non-Member Utility Functions:
-// =============================
-
-uint64_t factorial( uint64_t const n);
-
-uint64_t binomial(uint64_t const a, uint64_t const b);
-
-std::vector<int> combination(
-    int const upper,
-    int const num_elems,
-    int const num_comb
-);
