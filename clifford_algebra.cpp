@@ -229,15 +229,15 @@ GammaMatrix antisymmetrise(
     new_sequence.erase( new_sequence.begin() + i );
 
     // 2. Recursive step
-    auto buffer1 = antisymmetrise(gammas, new_sequence);
+    auto buffer = antisymmetrise(gammas, new_sequence);
 
     // 3. Take the product
-    auto index = sequence[i];
-    auto buffer2 = gammas[index] * buffer1;
+    auto const index = sequence[i];
+    buffer = buffer * gammas[index];
 
     // 4. Add to the result matrix
-    if(i % 2 == 0) matrix = matrix + buffer2;
-    else           matrix = matrix - buffer2;
+    if(i % 2 == 0) matrix = matrix + buffer;
+    else           matrix = matrix - buffer;
   }
 
   return matrix;
