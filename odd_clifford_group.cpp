@@ -17,6 +17,7 @@
 */
 
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include "model_parameters.hpp"
 #include "basic_maths.hpp"
@@ -65,8 +66,7 @@ std::vector<GammaMatrix> OddCliffordGroup::generate_odd_clifford_group_()
     }
   }
 
-  // TODO:
-  // add reshuffling!
+  reshuffle_gammas( big_gammas );
 
   return big_gammas;
 }
@@ -84,4 +84,37 @@ std::ostream& operator<<(std::ostream& os, OddCliffordGroup const& A)
     os << A.Gammas_[i] << std::endl;
   }
   return os;
+}
+
+
+void reshuffle_gammas(std::vector<GammaMatrix>& gammas)
+{
+  /**
+   *  \brief Reshuffles a vector of GammaMatrices such that
+   *         all hermitian matrices come first and all anti-hermitian
+   *         matrices come second
+   */
+
+  std::vector<GammaMatrix> herm;
+  std::vector<GammaMatrix> anti;
+
+  for( auto const& gamma : gammas )
+  {
+    if( is_hermitian(gamma) )
+    {
+      herm.push_back(gamma);
+    }
+    else if( is_antihermitian(gamma) )
+    {
+      anti.push_back(gamma);
+    }
+    else
+    {
+      std::cout << " reshuffle_gammas :: ERROR: non-valid matrix " << std::endl;
+    }
+  }
+
+  gammas.clear();
+  gammas.insert(std::end(gammas), std::begin(herm), std::end(herm));
+  gammas.insert(std::end(gammas), std::begin(anti), std::end(anti));
 }

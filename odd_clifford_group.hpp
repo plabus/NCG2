@@ -45,3 +45,13 @@ class OddCliffordGroup
     // with signature (p,q)
     std::vector<GammaMatrix> generate_odd_clifford_group_(void);
 };
+
+
+
+// Non-Member Functions:
+// =====================
+
+// Reshuffles a vector of GammaMatrices such that
+// all hermitian matrices come first and all anti-hermitian
+// matrices come second
+void reshuffle_gammas(std::vector<GammaMatrix>& gammas);
