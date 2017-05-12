@@ -80,7 +80,7 @@ std::ostream& operator<<(std::ostream& os, OddCliffordGroup const& A)
 {
   for(auto i= 0; i < A.Gammas_.size(); ++i)
   {
-    os << " Gamma " << i+1 << ":" << std::endl;
+    os << " \u0393_" << i+1 << ":" << std::endl;
     os << A.Gammas_[i] << std::endl;
   }
   return os;
