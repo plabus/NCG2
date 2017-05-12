@@ -33,9 +33,9 @@ class CliffordAlgebra
     CliffordAlgebra(void) = delete;
     explicit CliffordAlgebra(ModelParameters const pqn);
 
-    friend std::ostream& operator<<(std::ostream&, CliffordAlgebra const& A);
-
     GammaMatrix antisymmetric_product(std::vector<int> const& indices) const;
+
+    GammaMatrix const& gamma(int index) const { return gammas_[index]; }
     int size(void) const { return gammas_.size(); }
 
 
@@ -52,6 +52,8 @@ class CliffordAlgebra
 
 // Non-Member Functions:
 // =====================
+
+std::ostream& operator<<(std::ostream&, CliffordAlgebra const& A);
 
 // Generates the Euclidean Clifford Algebra { \gamma_\mu } with signature (d=p+q,0)
 std::vector<GammaMatrix> generate_euclidean_gammas(
