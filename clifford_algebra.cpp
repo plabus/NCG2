@@ -215,9 +215,9 @@ std::vector<GammaMatrix> generate_odd_clifford_group(
     const ModelParameters pqn
 )
 {
-  std::vector<GammaMatrix> Gammas;
-  const auto gammas = generate_small_gammas(pqn);
-  const auto d = gammas.size();
+  std::vector<GammaMatrix> big_gammas;
+  const auto small_gammas = generate_small_gammas(pqn);
+  const auto d = small_gammas.size();
 
   // for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
   for(auto num_indices = 0; num_indices <= d; num_indices += 1) // all numbers of indices
@@ -226,21 +226,24 @@ std::vector<GammaMatrix> generate_odd_clifford_group(
     //   # Gamma matrices = (d choose num_indices)
     const auto num_matrices = binomial(d, num_indices);
 
-    // Iterations over Gammas with fixed number of indices
+    // Iterations over big_gammas with fixed number of indices
     for(auto num_comb = 0; num_comb < num_matrices; ++num_comb)
     {
       // 1. Generate the [num_comb]th combination with num_indices elements
-      //    out of the range [0, 1, ..., d-1]
+      //    out of the range [0, 1, ..., d-1]. This will represent the
+      //    indices of the antisymmetric product of small gamma matrices.
+      // 2. Calculate the antisymmetric product and add it to the big
+      //    gamma matrices.
       const auto index_sequence = combination(d, num_indices, num_comb);
-      const auto matrix = antisymmetrise(gammas, index_sequence);
-      Gammas.push_back(matrix);
+      const auto matrix = antisymmetrise(small_gammas, index_sequence);
+      big_gammas.push_back(matrix);
     }
   }
 
   // TODO:
   // add reshuffling!
 
-  return Gammas;
+  return big_gammas;
 }
 
 
