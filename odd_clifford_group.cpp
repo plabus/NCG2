@@ -1,10 +1,10 @@
 /**
     NCG++
-    clifford_algebra.cpp
+    odd_clifford_group.cpp
 
     Purpose:
     Given the model parameters (p, q) initialise
-    the entire ODD gamma matrices
+    the entire odd big gamma matrices
 
     \Gamma_\mu = { \gamma_mu, \gamma_{\mu \nu \rho}, ... }
 
@@ -22,14 +22,14 @@
 #include <cassert>
 #include "model_parameters.hpp"
 #include "gamma_matrix.hpp"
-#include "clifford_algebra.hpp"
+#include "odd_clifford_group.hpp"
 
 
 
 // Member Functions:
 // =================
 
-CliffordAlgebra::CliffordAlgebra(ModelParameters const pqn)
+OddCliffordGroup::OddCliffordGroup(ModelParameters const pqn)
   :
     pqn_(pqn),
     // Gammas_(generate_small_gammas(pqn_))
@@ -43,7 +43,7 @@ CliffordAlgebra::CliffordAlgebra(ModelParameters const pqn)
 // =====================
 
 
-std::ostream& operator<<(std::ostream& os, CliffordAlgebra const& A)
+std::ostream& operator<<(std::ostream& os, OddCliffordGroup const& A)
 {
   for(auto i= 0; i < A.Gammas_.size(); ++i)
   {
