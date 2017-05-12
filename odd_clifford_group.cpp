@@ -19,6 +19,7 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
+#include <utility>
 #include "model_parameters.hpp"
 #include "basic_maths.hpp"
 #include "gamma_matrix.hpp"
@@ -33,7 +34,8 @@
 OddCliffordGroup::OddCliffordGroup(ModelParameters const pqn)
   :
     pqn_(pqn),
-    Gammas_(generate_odd_clifford_group_())
+    Gammas_(generate_odd_clifford_group_()),
+    num_matrices_(count_Hs_and_Ls(Gammas_))
 {
 }
 
@@ -76,10 +78,10 @@ std::vector<GammaMatrix> OddCliffordGroup::generate_odd_clifford_group_()
 
 std::ostream& operator<<(std::ostream& os, OddCliffordGroup const& A)
 {
-  for(auto i= 0; i < A.Gammas_.size(); ++i)
+  for(auto i= 0; i < A.size(); ++i)
   {
     os << " \u0393_" << i+1 << ":" << std::endl;
-    os << A.Gammas_[i] << std::endl;
+    os << A.Gamma(i) << std::endl;
   }
   return os;
 }
@@ -115,4 +117,24 @@ void reshuffle_gammas(std::vector<GammaMatrix>& gammas)
   gammas.clear();
   gammas.insert(std::end(gammas), std::begin(herm), std::end(herm));
   gammas.insert(std::end(gammas), std::begin(anti), std::end(anti));
+}
+
+
+std::pair<int,int> count_Hs_and_Ls(std::vector<GammaMatrix> const& gammas)
+{
+  /**
+   *  \brief Count the number of H's and L's in a vector of GammaMatrices
+   *         assuming all are either hermitian or antihermitian and
+   *         the hermitian matrices come first
+   */
+
+  int num_H = 0;
+  for( auto const& gamma : gammas )
+  {
+    if( is_hermitian(gamma) ) ++num_H;
+    else                      break;
+  }
+
+  int num_L = gammas.size() - num_H;
+  return std::make_pair( num_H, num_L );
 }
