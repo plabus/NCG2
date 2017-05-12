@@ -135,13 +135,13 @@ void count_Hs_and_Ls(std::vector<int> const& sequence, int const p, int const q,
 
 GammaMatrix antisymmetrise(
     std::vector<GammaMatrix> const& gammas,
-    std::vector<int> const& sequence,
-    int const d,
-    int const k
+    std::vector<int> const& sequence
 )
 {
   // Number of indices we have to antisymmetrise over
-  auto num_indices = sequence.size();
+  const auto num_indices = sequence.size();
+  const auto d = gammas.size();
+  const auto k = gammas.front().size();
 
   assert(num_indices <= d && "antisymmetrise: ERROR: Number of indices bigger than dimension!");
   for(auto i = 0; i < num_indices; ++i)
@@ -192,7 +192,7 @@ GammaMatrix antisymmetrise(
       new_sequence.erase( new_sequence.begin() + i );
 
       // 2. Recursive step
-      auto buffer1 = antisymmetrise(gammas, new_sequence, d, k);
+      auto buffer1 = antisymmetrise(gammas, new_sequence);
 
       // 3. Take the product
       auto index = sequence[i];
@@ -218,27 +218,27 @@ std::vector<GammaMatrix> generate_odd_clifford_group(
   const auto p = pqn.p();
   const auto q = pqn.q();
   const auto d = pqn.d();
-  const auto k = pqn.k();
   int num_H = 0;
   int num_L = 0;
 
   std::vector<GammaMatrix> Gammas;
   const auto gammas = generate_small_gammas(pqn);
 
-  for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
+  // for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
+  for(auto num_indices = 0; num_indices <= d; num_indices += 1) // all numbers of indices
   {
     // Calculate number of Gamma matrices with fixed number of indices:
-    //   # matrices = (d choose num_indices)
+    //   # Gamma matrices = (d choose num_indices)
     auto num_matrices = binomial(d, num_indices);
 
-    // Iterations over Gammas with fixed number of indices */
+    // Iterations over Gammas with fixed number of indices
     for(auto num_comb = 0; num_comb < num_matrices; ++num_comb)
     {
       // 1. Generate the [num_comb]th combination with num_indices elements
-      //    out of the range [0...d-1]
+      //    out of the range [0, 1, ..., d-1]
       auto const index_sequence = combination(d, num_indices, num_comb);
       count_Hs_and_Ls(index_sequence, p, q, num_H, num_L);
-      auto matrix = antisymmetrise(gammas, index_sequence, d, k);
+      auto matrix = antisymmetrise(gammas, index_sequence);
       Gammas.push_back(matrix);
     }
   }

@@ -89,7 +89,5 @@ void count_Hs_and_Ls(
 
 GammaMatrix antisymmetrise(
     std::vector<GammaMatrix> const& gammas,
-    std::vector<int> const& sequence,
-    int const d,
-    int const k
+    std::vector<int> const& sequence
 );
