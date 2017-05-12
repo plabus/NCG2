@@ -22,6 +22,7 @@
 #include <cassert>
 #include "model_parameters.hpp"
 #include "gamma_matrix.hpp"
+#include "clifford_algebra.hpp"
 #include "odd_clifford_group.hpp"
 
 
@@ -32,16 +33,49 @@
 OddCliffordGroup::OddCliffordGroup(ModelParameters const pqn)
   :
     pqn_(pqn),
-    // Gammas_(generate_small_gammas(pqn_))
-    Gammas_(generate_odd_clifford_group(pqn_))
+    Gammas_(generate_odd_clifford_group_())
 {
+}
+
+
+std::vector<GammaMatrix> OddCliffordGroup::generate_odd_clifford_group_()
+{
+  std::vector<GammaMatrix> big_gammas;
+  const CliffordAlgebra small_gammas(pqn_);
+  const auto d = small_gammas.size();
+
+  // FIXME: Set back to odd indices eventually
+  // for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
+  for(auto num_indices = 0; num_indices <= d; num_indices += 1) // all numbers of indices
+  {
+    // Calculate number of Gamma matrices with fixed number of indices:
+    //   # Gamma matrices = (d choose num_indices)
+    const auto num_matrices = binomial(d, num_indices);
+
+    // Iterations over big_gammas with fixed number of indices
+    for(auto num_comb = 0; num_comb < num_matrices; ++num_comb)
+    {
+      // 1. Generate the [num_comb]th combination with num_indices elements
+      //    out of the range [0, 1, ..., d-1]. This will represent the
+      //    indices of the antisymmetric product of small gamma matrices.
+      // 2. Calculate the antisymmetric product and add it to the big
+      //    gamma matrices.
+      const auto index_sequence = combination(d, num_indices, num_comb);
+      const auto matrix = small_gammas.antisymmetric_product(index_sequence);
+      big_gammas.push_back(matrix);
+    }
+  }
+
+  // TODO:
+  // add reshuffling!
+
+  return big_gammas;
 }
 
 
 
 // Non-Member Functions:
 // =====================
-
 
 std::ostream& operator<<(std::ostream& os, OddCliffordGroup const& A)
 {
@@ -208,137 +242,4 @@ GammaMatrix antisymmetrise(
   }
 
   return matrix;
-}
-
-
-std::vector<GammaMatrix> generate_odd_clifford_group(
-    const ModelParameters pqn
-)
-{
-  std::vector<GammaMatrix> big_gammas;
-  const auto small_gammas = generate_small_gammas(pqn);
-  const auto d = small_gammas.size();
-
-  // for(auto num_indices = 1; num_indices <= d; num_indices += 2) // odd numbers of indices
-  for(auto num_indices = 0; num_indices <= d; num_indices += 1) // all numbers of indices
-  {
-    // Calculate number of Gamma matrices with fixed number of indices:
-    //   # Gamma matrices = (d choose num_indices)
-    const auto num_matrices = binomial(d, num_indices);
-
-    // Iterations over big_gammas with fixed number of indices
-    for(auto num_comb = 0; num_comb < num_matrices; ++num_comb)
-    {
-      // 1. Generate the [num_comb]th combination with num_indices elements
-      //    out of the range [0, 1, ..., d-1]. This will represent the
-      //    indices of the antisymmetric product of small gamma matrices.
-      // 2. Calculate the antisymmetric product and add it to the big
-      //    gamma matrices.
-      const auto index_sequence = combination(d, num_indices, num_comb);
-      const auto matrix = antisymmetrise(small_gammas, index_sequence);
-      big_gammas.push_back(matrix);
-    }
-  }
-
-  // TODO:
-  // add reshuffling!
-
-  return big_gammas;
-}
-
-
-std::vector<GammaMatrix> generate_small_gammas(ModelParameters const pqn)
-{
-  /**
-   *  \brief Generate all small gamma matrices.
-   *
-   *  Generate all small gamma matrices with signiture (d,0)
-   *  and then multiply the last q matrices with I to
-   *  get small gamma matrices of signature (p,q)
-   */
-
-  auto gammas = generate_euclidean_gammas(pqn.d(), pqn);
-
-  const std::complex<int> I({0,1});
-  for(auto i = pqn.p(); i != gammas.size(); ++i)
-  {
-    gammas[i] *= I;
-  }
-
-  return gammas;
-}
-
-
-std::vector<GammaMatrix> generate_euclidean_gammas(
-    const int d,                // dimensionality of Clifford algebra = # of gamma's
-    const ModelParameters pqn   // provides gamma5_prefactor for odd dimensions,
-                                // set to zero by default
-)
-{
-  /**
-   *  \brief Generate all small Euclidean gamma matrices in d dimensions.
-   *
-   *  Generate all small gamma matrices with
-   *  signiture (d,0) recursively.
-   */
-
-  const PauliMatrices Pauli;
-  std::vector<GammaMatrix> gammas;
-
-  if( d == 1 ) // Start of recursion
-  {
-    gammas.push_back( Unity(1) );
-  }
-  else if( d == 2 ) // Start of recursion
-  {
-    gammas.push_back( Pauli.sigma1 );
-    gammas.push_back( Pauli.sigma2 );
-  }
-  else if( d > 2 && d % 2 == 0 ) // Even-dim case
-  {
-    /**
-     *  Gamma matrices in d even dimensions
-     *
-     *  { gamma_mu (x) sigma1, 1I (x) sigma2, 1I (x) sigma3 },
-     *
-     *  where gamma_mu and 1I are the matrices in (d-2) dimensions,
-     *  i.e. k x k square complex matrices with
-     *
-     *    k = 2^{(d-2)/2}
-     *
-     */
-    auto d_recursive = d-2;
-    auto k_recursive = static_cast<int>( pow(2, d_recursive/2) );
-    auto small_gammas = generate_euclidean_gammas(d_recursive);
-    auto one = Unity(k_recursive);
-
-    // The following are outer (tensor) products
-    for(auto gamma : small_gammas)
-    {
-      gammas.push_back( gamma % Pauli.sigma1 );
-    }
-    gammas.push_back( one % Pauli.sigma2 );
-    gammas.push_back( one % Pauli.sigma3 );
-  }
-  else // Odd-dim case
-  {
-    /**
-     *  Gamma matrices in d odd dimensions
-     *
-     *    { gamma_mu, gamma_5 },
-     *
-     *  where gamma_mu are the matrices d-1.
-     */
-    gammas = generate_euclidean_gammas(d-1);
-    auto prefactor = pqn.gamma5_prefactor();
-    auto gamma_5 = prefactor * gammas.front();
-
-    for(auto i = 1; i != gammas.size(); ++i)
-    {
-      gamma_5 *= gammas[i];
-    }
-    gammas.push_back( gamma_5 );
-  }
-
-  return gammas;
 }

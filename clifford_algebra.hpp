@@ -35,11 +35,14 @@ class CliffordAlgebra
 
     friend std::ostream& operator<<(std::ostream&, CliffordAlgebra const& A);
 
+    GammaMatrix antisymmetric_product(std::vector<int> const& indices) const;
+    int size(void) const { return gammas_.size(); }
+
 
   private:
 
-    const ModelParameters pqn_;
-    std::vector<GammaMatrix> gammas_;
+    ModelParameters const pqn_;
+    std::vector<GammaMatrix> const gammas_;
 
     // Generates the Clifford Algebra { \gamma_\mu } with signature (p,q)
     std::vector<GammaMatrix> generate_small_gammas_(void);
@@ -52,8 +55,8 @@ class CliffordAlgebra
 
 // Generates the Euclidean Clifford Algebra { \gamma_\mu } with signature (d=p+q,0)
 std::vector<GammaMatrix> generate_euclidean_gammas(
-    const int d,                                        // dimensionality of Clifford algebra = # of gamma's
-    const ModelParameters pqn = ModelParameters(0,0,0)  // provides gamma5_prefactor for odd dimensions,
+    int const d,                                        // dimensionality of Clifford algebra = # of gamma's
+    ModelParameters const pqn = ModelParameters(0,0,0)  // provides gamma5_prefactor for odd dimensions,
                                                         // set to zero by default
 );
 
@@ -63,5 +66,5 @@ std::vector<GammaMatrix> generate_euclidean_gammas(
 
 GammaMatrix antisymmetrise(
     std::vector<GammaMatrix> const& gammas,
-    std::vector<int> const& sequence
+    std::vector<int> const& indices
 );
