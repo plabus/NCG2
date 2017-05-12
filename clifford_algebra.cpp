@@ -120,10 +120,13 @@ void count_Hs_and_Ls(std::vector<int> const& sequence, int const p, int const q,
   else
   {
     auto exp = ( n - 1 ) * n / 2;
-    for(int i = 0; i < n; ++i) if(sequence[i] >= p) exp++;
+    for(int i = 0; i < n; ++i)
+    {
+      if(sequence[i] >= p) exp++;
+    }
 
-    if(exp%2==0) num_H += 1;
-    else         num_L += 1;
+    if(exp % 2 == 0) num_H += 1;
+    else             num_L += 1;
   }
 }
 
