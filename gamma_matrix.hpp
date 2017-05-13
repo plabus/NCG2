@@ -86,6 +86,9 @@ GammaMatrix operator/(GammaMatrix const& A, int c);
 GammaMatrix commutator(GammaMatrix const& A, GammaMatrix const& B);
 GammaMatrix anticommutator(GammaMatrix const& A, GammaMatrix const& B);
 
+// Calculate the trace of a GammaMatrix
+std::complex<int> Tr(GammaMatrix const& A);
+
 // These return true is M is hermitain / antihermitian respectively
 bool is_hermitian(GammaMatrix const& M);
 bool is_antihermitian(GammaMatrix const& M);

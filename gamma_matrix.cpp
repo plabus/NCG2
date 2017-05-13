@@ -190,6 +190,13 @@ GammaMatrix anticommutator(GammaMatrix const& A, GammaMatrix const& B)
   return A*B+B*A;
 }
 
+std::complex<int> Tr(GammaMatrix const& A)
+{
+  std::complex<int> trace({0,0});
+  for(auto i = 0; i < A.size(); ++i)
+    trace += A(i,i);
+  return trace;
+}
 
 bool is_hermitian(GammaMatrix const& M)
 {
