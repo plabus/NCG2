@@ -56,9 +56,6 @@ class GammaMatrix
     std::complex<int>& operator()(const int row, const int col) { return M_[row*size_+col]; }
 
 
-    friend std::ostream& operator<<(std::ostream& os, GammaMatrix const& A);
-
-
   private:
 
     // Private Member Variables:
@@ -66,13 +63,13 @@ class GammaMatrix
 
     const int size_;
     std::vector< std::complex<int>  > M_;
-
-    void print_(void) const;
 };
 
 
 // Non-Member Functions:
 // =====================
+
+std::ostream& operator<<(std::ostream& os, GammaMatrix const& A);
 
 // These are addition, substraction, multiplication and outer (tensor) multiplication
 GammaMatrix operator+(GammaMatrix const& A, GammaMatrix const& B);

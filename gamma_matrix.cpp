@@ -33,7 +33,24 @@ M_(list)
 
 std::ostream& operator<<(std::ostream& os, const GammaMatrix& A)
 {
-  A.print_();
+  std::complex<int> zero({0,0});
+  std::complex<int> one({1,0});
+  std::complex<int> I({0,1});
+
+  for(auto row = 0; row < A.size(); ++row)
+  {
+    for(auto col = 0; col < A.size(); ++col)
+    {
+      auto elem = A(row,col);
+      if( elem == zero )      os << "  0";
+      else if( elem ==  one ) os << "  1";
+      else if( elem == -one ) os << " -1";
+      else if( elem ==  I )   os << "  i";
+      else if( elem == -I )   os << " -i";
+      else                    os << " " << elem;
+    }
+    os << std::endl;
+  }
   return os;
 }
 
@@ -47,27 +64,6 @@ GammaMatrix& GammaMatrix::operator=(GammaMatrix const& other)
   return *this;
 }
 
-void GammaMatrix::print_(void) const
-{
-  std::complex<int> zero({0,0});
-  std::complex<int> one({1,0});
-  std::complex<int> I({0,1});
-
-  for(auto row = 0; row < size_; ++row)
-  {
-    for(auto col = 0; col < size_; ++col)
-    {
-      auto elem = (*this)(row,col);
-      if( elem == zero )      std::cout << "  0";
-      else if( elem ==  one ) std::cout << "  1";
-      else if( elem == -one ) std::cout << " -1";
-      else if( elem ==  I )   std::cout << "  i";
-      else if( elem == -I )   std::cout << " -i";
-      else                    std::cout << " " << elem;
-    }
-    std::cout << std::endl;
-  }
-}
 
 
 
