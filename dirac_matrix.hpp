@@ -24,17 +24,32 @@ class DiracMatrix
 {
   public:
 
+    DiracMatrix(void) = delete;
+    DiracMatrix(
+        ModelParameters const pqn,
+        MathLibrary const matrix_impl = MathLibrary::Custom
+    )
+      :
+    pqn_(pqn)
+    , matrix_impl_(matrix_impl)
+    , cliff_(CliffordAlgebra(pqn_))
+    , H_( std::vector< HermitianMatrix<FT> >(0) )
+    , L_( std::vector< AntiHermitianMatrix<FT> >(0) )
+    {
+    }
+
     FT operator()(int row, int column) const;
     FT operator()(int row, int column);
 
+    int num_H(void) const { return H_.size(); }
+    int num_L(void) const { return L_.size(); }
+    int size(void) const { return H_.size() + L_.size(); }
 
   private:
 
-    const MathLibrary matrix_impl_;
     const ModelParameters pqn_;
+    const MathLibrary matrix_impl_;
     const CliffordAlgebra cliff_;
-    const int num_H_;
-    const int num_L_;
     std::vector< HermitianMatrix<FT> > H_;
     std::vector< AntiHermitianMatrix<FT> > L_;
 };
