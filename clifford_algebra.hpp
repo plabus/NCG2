@@ -30,21 +30,33 @@ class CliffordAlgebra
 {
   public:
 
+    // Public Member Functions:
+    // ========================
+
+    // Constructors:
     CliffordAlgebra(void) = delete;
     explicit CliffordAlgebra(ModelParameters const pqn);
 
-    GammaMatrix antisymmetric_product(std::vector<int> const& indices) const;
-
+    // Getters:
     GammaMatrix const& gamma(int index) const { return gammas_[index]; }
+    int size(void) const { return gammas_.size(); }
+
+    // Setters:
     GammaMatrix& gamma(int index) { return gammas_[index]; }
 
-    int size(void) const { return gammas_.size(); }
+    // Functionality:
+    GammaMatrix antisymmetric_product(std::vector<int> const& indices) const;
 
 
   private:
 
+    // Private Member Variables:
+    // =========================
     ModelParameters const pqn_;
     std::vector<GammaMatrix> gammas_;
+
+    // Private Member Functions:
+    // =========================
 
     // Generates the Clifford Algebra { \gamma_\mu } with signature (p,q)
     std::vector<GammaMatrix> generate_small_gammas_(void);
