@@ -32,13 +32,19 @@ class OddCliffordGroup
 
     // Public Member Functions:
     // ========================
+
+    // Constructors:
     OddCliffordGroup(void) = delete;
     explicit OddCliffordGroup(ModelParameters const pqn);
 
+    // Getters:
     GammaMatrix const& Gamma(int index) const { return Gammas_[index]; }
     int num_H(void) const { return num_matrices_.first; }
     int num_L(void) const { return num_matrices_.second; }
     int size(void) const { return Gammas_.size(); }
+
+    // Setters:
+    GammaMatrix& Gamma(int index) { return Gammas_[index]; }
 
 
   private:
@@ -46,7 +52,7 @@ class OddCliffordGroup
     // Private Member Variables:
     // =========================
     ModelParameters const pqn_;
-    std::vector<GammaMatrix> const Gammas_;
+    std::vector<GammaMatrix> Gammas_;
     std::pair<int,int> const num_matrices_;
 
     // Private Member Functions:
