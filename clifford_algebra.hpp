@@ -36,13 +36,15 @@ class CliffordAlgebra
     GammaMatrix antisymmetric_product(std::vector<int> const& indices) const;
 
     GammaMatrix const& gamma(int index) const { return gammas_[index]; }
+    GammaMatrix& gamma(int index) { return gammas_[index]; }
+
     int size(void) const { return gammas_.size(); }
 
 
   private:
 
     ModelParameters const pqn_;
-    std::vector<GammaMatrix> const gammas_;
+    std::vector<GammaMatrix> gammas_;
 
     // Generates the Clifford Algebra { \gamma_\mu } with signature (p,q)
     std::vector<GammaMatrix> generate_small_gammas_(void);
